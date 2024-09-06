@@ -64,21 +64,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: currentIndex==0?Color(0xffFD4556):Colors.transparent,
                           borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Text("Agents",style: TextStyle(color: Colors.white),),
+                      child: Text("Agents",style: TextStyle(fontFamily: "valorant",color: Colors.white),),
                     ),Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: currentIndex==1?Color(0xffFD4556):Colors.transparent,
                           borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Text("Maps",style: TextStyle(color: Colors.white),),
+                      child: Text("Maps",style: TextStyle(fontFamily: "valorant",color: Colors.white),),
                     ),Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: currentIndex==2?Color(0xffFD4556):Colors.transparent,
                           borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Text("Weapons",style: TextStyle(color: Colors.white),),
+                      child: Text("Weapons",style: TextStyle(fontFamily: "valorant",color: Colors.white),),
                     ),
 
               ])),
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(15.0),
                           child: InkWell(
                             onTap: (){
-                              Navigator.pushReplacementNamed(context, AgientDetail.routename,arguments: ageintIndex(index));
+                              Navigator.pushNamed(context, AgientDetail.routename, arguments: ageintIndex(index));
                             },
                             child: Card(
                               color: Colors.transparent,
@@ -106,7 +106,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                 child: Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.green,
+                                        gradient: LinearGradient(
+                                          colors: role[index].backgroundGradientColors?.map((colorHex) {
+                                            if (colorHex.length == 8) {
+                                              colorHex = colorHex.substring(6) + colorHex.substring(0, 6);
+                                            }
+                                            return Color(int.parse("0x$colorHex"));
+                                          }).toList() ?? [Colors.green],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
                                         borderRadius: BorderRadius.only(
                                             bottomRight: Radius.circular(100),
                                             bottomLeft: Radius.zero,
@@ -129,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ],
                                       ),
                                     )),
-
                             ),
                           ),
                         );
@@ -159,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(maps[index].displayName??"",style: TextStyle(
                                       fontSize: 30,
                                         color: Colors.white,fontWeight: FontWeight.bold),),
-                                
                                   ],
                                 ),
                               )),
@@ -176,8 +183,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                       return Card(
                         color: Colors.transparent,
-
-                        child: Image(image: NetworkImage(weapons[index].displayIcon??"")),
+                        child: Stack(
+                          children: [
+                            Container(child:
+                                Image(image: NetworkImage(weapons[index].displayIcon??""),fit: BoxFit.cover,)),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0), // Adding padding for better spacing
+                                child: Text(
+                                  weapons[index].displayName ?? "",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },),
                   );
