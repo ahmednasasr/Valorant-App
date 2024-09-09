@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:routeexam/core/api_manger.dart';
 import 'package:routeexam/models/agents_model.dart';
@@ -128,7 +129,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Container(
                                             height: 700
-                                             , child: Image(image: NetworkImage(role[index].fullPortrait??""),fit: BoxFit.cover,)),
+                                             , child:   CachedNetworkImage(
+                                            fit: BoxFit.cover,
+                                            imageUrl: role[index].fullPortrait??"",
+                                            errorWidget: (context, url, error) => Icon(Icons.error),
+                                          )
+                                          ),
                                           Align(
                                             alignment: Alignment.bottomLeft,
                                             child: Text(role[index].displayName??"",style: TextStyle(
@@ -160,10 +166,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Expanded(
                                 child: Stack(
                                   children: [
-                                    Expanded(child: Image(image: NetworkImage(maps[index].splash??""),fit: BoxFit.cover,)),
-                                    Align(
+                                    Expanded(child:
+                                    CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: maps[index].splash??"",
+                                      placeholder: (context, url) => CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                    ),
+                                    ),                                    Align(
                                       alignment: Alignment.topRight,
-                                        child: Image(image: NetworkImage(maps[index].displayIcon??""))),
+                            child:  CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: maps[index].displayIcon??"",
+                              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),
+                          ),
                                     Text(maps[index].displayName??"",style: TextStyle(
                                       fontSize: 30,
                                         color: Colors.white,fontWeight: FontWeight.bold),),
@@ -186,8 +204,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Stack(
                           children: [
                             Container(child:
-                                Image(image: NetworkImage(weapons[index].displayIcon??""),fit: BoxFit.cover,)),
-                            Positioned(
+                        CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: weapons[index].displayIcon??"",
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        )
+                            ),
+                              Positioned(
                               bottom: 0,
                               left: 0,
                               child: Padding(
